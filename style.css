@@ -7,7 +7,11 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url('https://i.postimg.cc/25hNQx8F/873736c4d44105186e890025bed2e46e.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* باش تبقى ثابتة */
   min-height: 100vh;
   padding: 20px;
   direction: rtl;
