@@ -23,9 +23,11 @@ body {
 }
 
 .header {
+  background: #000 !important;
+  color: #fff !important;
+  padding: 20px;
+  border-radius: 15px;
   text-align: center;
-  color: white;
-  margin-bottom: 30px;
 }
 
 .header h1 {
