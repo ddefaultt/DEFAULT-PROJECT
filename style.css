@@ -7,123 +7,128 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-image: url('https://i.postimg.cc/25hNQx8F/873736c4d44105186e890025bed2e46e.png');
+  background-image: url('https://i.postimg.cc/x1FLvKFM/ichigo-kurosaki-bleach-GIF.gif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; /* باش تبقى ثابتة */
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
   direction: rtl;
 }
 
 .container {
-  width: 100%;
-  max-width: 450px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 30px;
-  padding: 40px 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.title {
-  color: #000;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  text-align: right;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
-.input-field {
-  width: 100%;
-  padding: 15px 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 15px;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.3s;
-  background: white;
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
   color: #333;
-  text-align: right;
+  font-size: 1rem;
 }
 
-.input-field:focus {
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.input-field::placeholder {
-  color: #999;
-  text-align: right;
-}
-
-.textarea-field {
+.form-group textarea {
   resize: vertical;
-  min-height: 100px;
 }
 
-.send-btn {
+.btn-primary {
   width: 100%;
-  padding: 18px;
+  padding: 15px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 15px;
-  font-size: 1.2rem;
-  font-weight: 700;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.send-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
-.send-btn:disabled {
+.btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.send-btn.loading {
-  position: relative;
-  color: transparent;
-}
-
-.send-btn.loading::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.loader {
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hidden {
+  display: none !important;
 }
 
 .status {
   margin-top: 20px;
   padding: 15px;
-  border-radius: 12px;
+  border-radius: 10px;
   text-align: center;
   font-weight: 600;
   animation: fadeIn 0.3s;
@@ -147,26 +152,31 @@ body {
   border: 2px solid #bee5eb;
 }
 
-.hidden {
-  display: none !important;
-}
-
 .logs-container {
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
-  padding: 15px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.logs-container h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+#logsContent {
   max-height: 300px;
   overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
 }
 
 .log-entry {
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
   animation: slideIn 0.3s;
-  text-align: right;
 }
 
 .log-entry.success {
@@ -185,25 +195,27 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 640px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  
   .card {
-    padding: 30px 20px;
-  }
-  
-  .title {
-    font-size: 1rem;
-  }
-  
-  .send-btn {
-    font-size: 1.1rem;
+    padding: 20px;
   }
 }
