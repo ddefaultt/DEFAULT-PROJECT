@@ -93,3 +93,13 @@ function addLog(type, message) {
   logsContent.appendChild(logEntry);
   logsContent.scrollTop = logsContent.scrollHeight;
 }
+
+const sendBtn = document.getElementById('sendBtn');
+sendBtn.addEventListener('mousemove', (e) => {
+  const rect = sendBtn.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  
+  sendBtn.style.setProperty('--x', `${x}%`);
+  sendBtn.style.setProperty('--y', `${y}%`);
+});
