@@ -59,10 +59,7 @@ document.getElementById('webhookForm').addEventListener('submit', async (e) => {
     }
     
     // انتظار ثانية بين كل رسالة (ماعدا الأخيرة)
-    if (i < count) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-  }
+    
   
   // إعادة تفعيل الزر
   sendBtn.disabled = false;
