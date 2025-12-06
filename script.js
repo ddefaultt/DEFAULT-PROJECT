@@ -28,31 +28,40 @@ document.getElementById('webhookForm').addEventListener('submit', async (e) => {
   let successCount = 0;
   let errorCount = 0;
   
-for (let i = 1; i <= count; i++) {
-  try {
-    addLog('info', `📤 محاولة إرسال الرسالة ${i}/${count}...`);
-    
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        content: message
-      })
-    });
-    
-    if (response.ok || response.status === 204) {
-      successCount++;
-      addLog('success', `✓ تم إرسال الرسالة ${i}/${count} بنجاح!`);
-    } else {
+  // بدء الإرسال
+  addLog('info', `🚀 بدء إرسال ${count} رسالة...`);
+  
+  for (let i = 1; i <= count; i++) {
+    try {
+      addLog('info', `📤 محاولة إرسال الرسالة ${i}/${count}...`);
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: message
+        })
+      });
+      
+      if (response.ok || response.status === 204) {
+        successCount++;
+        addLog('success', `✓ تم إرسال الرسالة ${i}/${count} بنجاح!`);
+      } else {
+        errorCount++;
+        const errorText = await response.text();
+        addLog('error', `✗ فشل إرسال الرسالة ${i}: ${response.status} - ${errorText}`);
+      }
+    } catch (error) {
       errorCount++;
-      const errorText = await response.text();
-      addLog('error', `✗ فشل إرسال الرسالة ${i}: ${response.status} - ${errorText}`);
+      addLog('error', `✗ خطأ في إرسال الرسالة ${i}: ${error.message}`);
     }
-  } catch (error) {
-    errorCount++;
-    addLog('error', `✗ خطأ في إرسال الرسالة ${i}: ${error.message}`);
+    
+    // انتظار ثانية بين كل رسالة (ماعدا الأخيرة)
+    if (i < count) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
   }
   
   // إعادة تفعيل الزر
