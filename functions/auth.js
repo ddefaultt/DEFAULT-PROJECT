@@ -1,16 +1,16 @@
 const fetch = require('node-fetch');
 
-exports.handler = async (event, context) => {
-  const code = event.queryStringParameters.code;
+exports.handler = async (event) => {
+  const code = event.queryStringParameters?.code;
   if (!code) return { statusCode: 400, body: "لا يوجد كود للتحقق." };
 
   const client_id = "1448765895785582744";
-  const client_secret = "KL36twVtuSD4Zd1K-fcjAm24FH4hXfID";
+  const client_secret = "KL36twVtuSD4Zd1K-fcjAm24FH4hXfID"; // هذا توكن البوت
   const redirect_uri = "https://team-x-webhook-spam-1.netlify.app/.auth/discord/callback";
   const server_id = "1233298974467817482";
   const role_id = "1243912778670931968";
 
-  // Step 1: Exchange code for access token
+  // 1️⃣ Exchange code for access token
   const params = new URLSearchParams();
   params.append("client_id", client_id);
   params.append("client_secret", client_secret);
@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
 
   if (!tokenData.access_token) return { statusCode: 401, body: "توكن غير صالح." };
 
-  // Step 2: Get user info
+  // 2️⃣ Get user info
   let userData;
   try {
     const res = await fetch("https://discord.com/api/users/@me", {
@@ -43,7 +43,7 @@ exports.handler = async (event, context) => {
     return { statusCode: 500, body: "خطأ أثناء جلب بيانات المستخدم." };
   }
 
-  // Step 3: Get guilds of user
+  // 3️⃣ Get guilds of user
   let guilds;
   try {
     const res = await fetch("https://discord.com/api/users/@me/guilds", {
@@ -56,17 +56,14 @@ exports.handler = async (event, context) => {
 
   const inServer = guilds.some(g => g.id === server_id);
   if (!inServer) {
-    return {
-      statusCode: 200,
-      body: `<h1>لقد تم رفضك بسبب عدم وجودك في سيرفر TEAM X</h1>`
-    };
+    return { statusCode: 200, body: `<h1>لقد تم رفضك بسبب عدم وجودك في سيرفر TEAM X</h1>` };
   }
 
-  // Step 4: Check role using Bot token
+  // 4️⃣ Check role using Bot token
   let memberInfo;
   try {
     const res = await fetch(`https://discord.com/api/guilds/${server_id}/members/${userData.id}`, {
-      headers: { Authorization: `Bot ${client_secret}` } // البوت لازم شغال وصالح
+      headers: { Authorization: `Bot ${client_secret}` }
     });
     memberInfo = await res.json();
   } catch {
@@ -74,13 +71,10 @@ exports.handler = async (event, context) => {
   }
 
   if (!memberInfo.roles || !memberInfo.roles.includes(role_id)) {
-    return {
-      statusCode: 200,
-      body: `<h1>يرجى التواصل مع مدراء سيرفر TEAM X لحل المشكلة</h1>`
-    };
+    return { statusCode: 200, body: `<h1>يرجى التواصل مع مدراء سيرفر TEAM X لحل المشكلة</h1>` };
   }
 
-  // Step 5: All good → redirect to main.html
+  // 5️⃣ All good → redirect to main.html
   return {
     statusCode: 302,
     headers: { Location: "/main.html" },
