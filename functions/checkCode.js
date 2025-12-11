@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
-const BIN_ID = "ضع Bin ID هنا";
-const SECRET_KEY = "ضع Secret Key هنا";
+const BIN_ID = "693b36c9ae596e708f937112";
+const SECRET_KEY = "$2a$10$AjRuVKTacvaXsqsQqhfn4.Gig6qoHtADY3IqpR9Kezp93l.BAbu8K";
 
 exports.handler = async (event) => {
     const code = event.queryStringParameters?.code;
