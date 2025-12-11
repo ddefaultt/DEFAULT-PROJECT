@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" }
     });
     tokenData = await res.json();
-  } catch (err) {
+  } catch {
     return { statusCode: 500, body: "خطأ أثناء جلب التوكن." };
   }
 
@@ -39,26 +39,48 @@ exports.handler = async (event, context) => {
       headers: { Authorization: `Bearer ${tokenData.access_token}` }
     });
     userData = await res.json();
-  } catch (err) {
+  } catch {
     return { statusCode: 500, body: "خطأ أثناء جلب بيانات المستخدم." };
   }
 
-  // Step 3: Get member info from server (using Bot token)
+  // Step 3: Get guilds of user
+  let guilds;
+  try {
+    const res = await fetch("https://discord.com/api/users/@me/guilds", {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+    guilds = await res.json();
+  } catch {
+    return { statusCode: 500, body: "خطأ أثناء جلب السيرفرات." };
+  }
+
+  const inServer = guilds.some(g => g.id === server_id);
+  if (!inServer) {
+    return {
+      statusCode: 200,
+      body: `<h1>لقد تم رفضك بسبب عدم وجودك في سيرفر TEAM X</h1>`
+    };
+  }
+
+  // Step 4: Check role using Bot token
   let memberInfo;
   try {
     const res = await fetch(`https://discord.com/api/guilds/${server_id}/members/${userData.id}`, {
-      headers: { Authorization: `Bot ${client_secret}` } // لازم البوت يكون في السيرفر وعندو صلاحيات
+      headers: { Authorization: `Bot ${client_secret}` } // البوت لازم شغال وصالح
     });
     memberInfo = await res.json();
-  } catch (err) {
-    return { statusCode: 500, body: "خطأ أثناء جلب بيانات العضو." };
+  } catch {
+    return { statusCode: 500, body: "خطأ أثناء التحقق من العضو." };
   }
 
   if (!memberInfo.roles || !memberInfo.roles.includes(role_id)) {
-    return { statusCode: 403, body: "لا تمتلك الرول المطلوب للدخول." };
+    return {
+      statusCode: 200,
+      body: `<h1>يرجى التواصل مع مدراء سيرفر TEAM X لحل المشكلة</h1>`
+    };
   }
 
-  // Step 4: Redirect to main.html
+  // Step 5: All good → redirect to main.html
   return {
     statusCode: 302,
     headers: { Location: "/main.html" },
