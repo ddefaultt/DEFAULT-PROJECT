@@ -7,25 +7,22 @@
 </head>
 <body>
 
-<script>
-// إذا عندو كود مخزن، يدخل مباشرة
-if(localStorage.getItem("access_code")) {
-    window.location.href = "main.html";
-}
+<h1>🔐 كود الدخول الخاص بك</h1>
+<div id="code" style="font-size:28px; font-weight:bold;"></div>
+<p>أرسل هذا الكود لصاحب الموقع لتفعيله.</p>
 
-// توليد كود عشوائي 6 أرقام
+<script>
 function generateCode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 const code = generateCode();
+document.getElementById("code").innerText = code;
 
-// عرض الكود
-document.write(`
-  <h2>🔐 كود الدخول الخاص بك</h2>
-  <p style="font-size:28px; font-weight:bold;">${code}</p>
-  <p>أرسل هذا الكود لصاحب الموقع لتفعيل دخولك.</p>
-`);
+// خزنه مؤقتًا في LocalStorage
+localStorage.setItem("temp_code", code);
+
+// بعد ما يضيفه صاحب الموقع لل-whitelist، المستخدم سيستخدم رابط: validation.html?code=XXXXXX
 </script>
 
 </body>
