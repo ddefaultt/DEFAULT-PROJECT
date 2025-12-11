@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقق من الدخول</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f0f0f0;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #5865F2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+    button:hover {
+      background-color: #4752C4;
+    }
+  </style>
+</head>
+<body>
+  <h1>مرحبا بك! الرجاء التحقق من حسابك</h1>
+  <p>اضغط على الزر أدناه للتحقق من العضوية والدور الخاص بك على Discord</p>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1448765895785582744&permissions=0&scope=identify%20guilds%20guilds.members.read&response_type=code&redirect_uri=https%3A%2F%2Fteam-x-webhook-spam-1.netlify.app%2F.auth%2Fdiscord%2Fcallback">
+    <button>تسجيل الدخول عبر Discord</button>
+  </a>
+</body>
+</html>
