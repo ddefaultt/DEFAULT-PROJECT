@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تفعيل الدخول</title>
+</head>
+<body>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
+
+if(!code) {
+    document.write("<h1>❌ الرابط غير صالح</h1>");
+} else {
+    // استدعاء Netlify Function
+    fetch(`/.netlify/functions/checkCode?code=${code}`)
+    .then(res => res.json())
+    .then(data => {
+        if(data.valid) {
+            // تخزين الكود في LocalStorage
+            localStorage.setItem("access_code", code);
+            window.location.href = "main.html";
+        } else {
+            document.write("<h1>❌ الكود غير موجود أو غير مفعل</h1>");
+        }
+    })
+    .catch(err => document.write("<h1>❌ خطأ في الاتصال</h1>"));
+}
+</script>
+
+</body>
+</html>
