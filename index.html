@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>التحقق</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقق من الدخول</title>
 </head>
 <body>
 
-<h1>🔐 أدخل كود الدخول الخاص بك</h1>
-<input type="text" id="codeInput" placeholder="أدخل الكود">
-<button onclick="checkCode()">دخول</button>
-<p id="status" style="color:red;"></p>
+<h1>🔐 كود الدخول الخاص بك</h1>
+<div id="code" style="font-size:30px;font-weight:bold;"></div>
+<p>أرسل هذا الكود لصاحب الموقع لتفعيله.</p>
+
+<button onclick="checkAccess()">دخول للموقع</button>
 
 <script>
-if(localStorage.getItem("access_code") === "granted"){
+async function loadCode() {
+  const res = await fetch("/.netlify/functions/checkCode?action=get");
+  const data = await res.json();
+
+  // عرض الكود للمستخدم
+  document.getElementById("code").innerText = data.code;
+
+  // تخزين الكود في LocalStorage
+  localStorage.setItem("my_code", data.code);
+}
+
+async function checkAccess() {
+  let c = localStorage.getItem("my_code");
+  const res = await fetch("/.netlify/functions/checkCode?action=check&code=" + c);
+  const data = await res.json();
+
+  if (data.status === "allowed") {
+    localStorage.setItem("access_code", "granted");
     window.location.href = "main.html";
+  } else {
+    alert("❌ الكود غير مفعل بعد");
+  }
 }
 
-async function checkCode(){
-    const userCode = document.getElementById("codeInput").value;
-    try {
-        const res = await fetch("codes.json");
-        const data = await res.json();
-
-        if(data.codes.includes(userCode)){
-            localStorage.setItem("access_code", "granted");
-            window.location.href = "main.html";
-        } else {
-            document.getElementById("status").innerText = "❌ الكود غير صحيح";
-        }
-    } catch(e){
-        document.getElementById("status").innerText = "❌ خطأ في قراءة الكودات";
-    }
-}
+loadCode();
 </script>
 
 </body>
