@@ -9,17 +9,17 @@
 
 <h1>🔐 كود الدخول الخاص بك</h1>
 <div id="code" style="font-size:30px;font-weight:bold;margin-bottom:10px;"></div>
-<p>أرسل هذا الكود لصاحب الموقع لتفعيله.</p>
+<p>يرجى التواصل مع TEAM X NINJA لتفعيل الكود.</p>
 
 <button onclick="checkAccess()">دخول للموقع</button>
 
 <script>
+// تحميل الكود الخاص بـ IP
 async function loadCode() {
-  // جلب الكود من الـ Netlify Function
   const res = await fetch("/.netlify/functions/checkCode?action=get");
   const data = await res.json();
 
-  // عرض الكود للمستخدم
+  // عرض الكود
   const codeDiv = document.getElementById("code");
   codeDiv.innerText = data.code;
 
@@ -27,7 +27,7 @@ async function loadCode() {
   localStorage.setItem("my_code", data.code);
 }
 
-// التحقق من الكود المفعّل
+// التحقق من الكود إذا مفعّل في codes.json
 async function checkAccess() {
   const c = localStorage.getItem("my_code");
   const res = await fetch("/.netlify/functions/checkCode?action=check&code=" + c);
@@ -41,7 +41,7 @@ async function checkAccess() {
   }
 }
 
-// تحميل الكود عند فتح الصفحة
+// عند فتح الصفحة
 loadCode();
 </script>
 
