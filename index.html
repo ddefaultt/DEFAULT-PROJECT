@@ -1,46 +1,105 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>التحقق من الدخول</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التحقق من الدخول</title>
+<style>
+  /* خلفية الصورة */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('background.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+  }
+
+  /* صندوق الكود */
+  .code-box {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
+    animation: fadeIn 1.5s ease-in-out;
+  }
+
+  #code {
+    font-size: 50px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #fff;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #fff;
+    opacity: 0;
+    animation: fadeText 2s ease-in-out forwards 1s;
+  }
+
+  /* أنيميشن fade in */
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes glow {
+    0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+    50% { text-shadow: 0 0 10px #fff, 0 0 20px #ff0; }
+    100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+  }
+
+  @keyframes fadeText {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+</style>
 </head>
 <body>
 
-<h1>🔐 كود الدخول الخاص بك</h1>
-<div id="code" style="font-size:30px;font-weight:bold;margin-bottom:10px;"></div>
-<p>أرسل هذا الكود إلى TEAM X NINJA لتفعيل الدخول.</p>
+<div class="code-box">
+  <h1>🔐 كود الدخول الخاص بك</h1>
+  <div id="code"></div>
+  <p>أرسل هذا الكود إلى <strong>TEAM X NINJA</strong> لتفعيل الدخول</p>
+</div>
 
 <script>
-// 1️⃣ جلب الكود من LocalStorage (ثابت)
+// جلب الكود من LocalStorage إذا موجود
 let myCode = localStorage.getItem("my_fixed_code");
 
-// 2️⃣ إذا ماكانش → نولّدو واحد جديد
+// إذا ماكانش موجود → يولّد كود جديد
 if (!myCode) {
     myCode = Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem("my_fixed_code", myCode);
 }
 
-// 3️⃣ نعرضو الكود للشخص
+// عرض الكود
 document.getElementById("code").innerText = myCode;
 
-// 4️⃣ نتحقق إذا الكود مفعّل في ملف codes.json
+// التحقق التلقائي من تفعيل الكود
 async function checkAccess() {
     try {
         const res = await fetch("codes.json?nocache=" + Date.now());
         const list = await res.json();
 
-        // إذا الكود موجود → دخول تلقائي
         if (list.includes(myCode)) {
             localStorage.setItem("access_granted", "yes");
             window.location.href = "main.html";
         }
     } catch (e) {
-        console.error("Error loading codes.json");
+        console.error("خطأ في تحميل codes.json");
     }
 }
 
-// نتحقق كل ثانية تلقائياً
+// نتحقق كل ثانية
 setInterval(checkAccess, 1000);
 </script>
 
