@@ -1,0 +1,9 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[redirects]]
+  from = "/.auth/discord/callback"
+  to = "/.netlify/functions/auth"
+  status = 200
+  force = true
