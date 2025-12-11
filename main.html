@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>
+// حماية الصفحة: إذا ما عندوش access_code → يرجعه للصفحة الرئيسية
+if (localStorage.getItem("access_code") !== "granted") {
+  window.location.href = "index.html";
+}
+  </script>
   <div class="container">
 
     <div class="header">
