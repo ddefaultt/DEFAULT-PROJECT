@@ -12,17 +12,17 @@
 <p>أرسل هذا الكود لصاحب الموقع لتفعيله.</p>
 
 <script>
-function generateCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+// جلب الكود من LocalStorage إذا موجود
+let code = localStorage.getItem("temp_code");
+
+// إذا ماكانش موجود → يولّد كود جديد
+if(!code) {
+    code = Math.floor(100000 + Math.random() * 900000).toString();
+    localStorage.setItem("temp_code", code);
 }
 
-const code = generateCode();
+// عرض الكود
 document.getElementById("code").innerText = code;
-
-// خزنه مؤقتًا في LocalStorage
-localStorage.setItem("temp_code", code);
-
-// بعد ما يضيفه صاحب الموقع لل-whitelist، المستخدم سيستخدم رابط: validation.html?code=XXXXXX
 </script>
 
 </body>
