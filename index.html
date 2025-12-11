@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>التحقق من الدخول</title>
 <style>
-  /* خلفية الصورة */
+  /* الجسم والخلفية */
   body {
     margin: 0;
     padding: 0;
@@ -14,9 +14,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('https://i.postimg.cc/x1FLvKFM/ichigo-kurosaki-bleach-GIF.gif') no-repeat center center/cover;
-    color: white;
     text-align: center;
+    overflow: hidden;
+    color: white;
+  }
+
+  /* GIF كخلفية */
+  #bg-gif {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
   }
 
   /* صندوق الكود */
@@ -65,6 +76,9 @@
 </head>
 <body>
 
+<!-- GIF الخلفية -->
+<img id="bg-gif" src="https://i.postimg.cc/x1FLvKFM/ichigo-kurosaki-bleach-GIF.gif" alt="Background GIF">
+
 <div class="code-box">
   <h1>🔐 كود الدخول الخاص بك</h1>
   <div id="code"></div>
@@ -72,24 +86,25 @@
 </div>
 
 <script>
-// جلب الكود من LocalStorage إذا موجود
+// 1️⃣ جلب الكود من LocalStorage إذا موجود
 let myCode = localStorage.getItem("my_fixed_code");
 
-// إذا ماكانش موجود → يولّد كود جديد
+// 2️⃣ إذا ماكانش موجود → يولّد كود جديد
 if (!myCode) {
     myCode = Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem("my_fixed_code", myCode);
 }
 
-// عرض الكود
+// 3️⃣ عرض الكود
 document.getElementById("code").innerText = myCode;
 
-// التحقق التلقائي من تفعيل الكود
+// 4️⃣ التحقق التلقائي من تفعيل الكود
 async function checkAccess() {
     try {
         const res = await fetch("codes.json?nocache=" + Date.now());
         const list = await res.json();
 
+        // إذا الكود موجود في codes.json → دخول مباشرة
         if (list.includes(myCode)) {
             localStorage.setItem("access_granted", "yes");
             window.location.href = "main.html";
