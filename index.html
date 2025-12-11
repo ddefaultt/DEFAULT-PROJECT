@@ -11,33 +11,25 @@
 <div id="code" style="font-size:30px;font-weight:bold;margin-bottom:10px;"></div>
 <p>يرجى التواصل مع TEAM X NINJA لتفعيل الكود.</p>
 
-<button onclick="checkAccess()">دخول للموقع</button>
-
 <script>
-// تحميل الكود الخاص بـ IP
+// تحميل الكود الخاص بـ IP والتحقق تلقائياً
 async function loadCode() {
+  // 1️⃣ جلب الكود من Netlify Function
   const res = await fetch("/.netlify/functions/checkCode?action=get");
   const data = await res.json();
-
-  // عرض الكود
   const codeDiv = document.getElementById("code");
   codeDiv.innerText = data.code;
 
   // تخزين الكود في LocalStorage
   localStorage.setItem("my_code", data.code);
-}
 
-// التحقق من الكود إذا مفعّل في codes.json
-async function checkAccess() {
-  const c = localStorage.getItem("my_code");
-  const res = await fetch("/.netlify/functions/checkCode?action=check&code=" + c);
-  const data = await res.json();
+  // 2️⃣ التحقق تلقائياً إذا الكود موجود في codes.json
+  const checkRes = await fetch("/.netlify/functions/checkCode?action=check&code=" + data.code);
+  const checkData = await checkRes.json();
 
-  if (data.status === "allowed") {
+  if (checkData.status === "allowed") {
     localStorage.setItem("access_code", "granted");
-    window.location.href = "main.html";
-  } else {
-    alert("❌ الكود غير مفعل بعد");
+    window.location.href = "main.html"; // مباشرة يدخل main.html
   }
 }
 
