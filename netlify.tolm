@@ -1,0 +1,9 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[redirects]]
+  from = "/.netlify/functions/checkCode"
+  to = "/.netlify/functions/checkCode"
+  status = 200
+  force = true
