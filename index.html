@@ -86,35 +86,32 @@
 </div>
 
 <script>
-// 1️⃣ جلب الكود من LocalStorage إذا موجود
-let myCode = localStorage.getItem("my_fixed_code");
+// 1️⃣ جلب كود المستخدم من localStorage أو إنشاء واحد جديد
+let myCode = localStorage.getItem("my_code");
 
-// 2️⃣ إذا ماكانش موجود → يولّد كود جديد
 if (!myCode) {
     myCode = Math.floor(100000 + Math.random() * 900000).toString();
-    localStorage.setItem("my_fixed_code", myCode);
+    localStorage.setItem("my_code", myCode);
 }
 
-// 3️⃣ عرض الكود
 document.getElementById("code").innerText = myCode;
 
-// 4️⃣ التحقق التلقائي من تفعيل الكود
+// 2️⃣ التحقق من وجود الكود داخل codes.json
 async function checkAccess() {
     try {
-        const res = await fetch("codes.json?nocache=" + Date.now());
-        const list = await res.json();
+        const res = await fetch("codes.json?x=" + Date.now());
+        const data = await res.json(); // array فقط
 
-        // إذا الكود موجود في codes.json → دخول مباشرة
-        if (list.includes(myCode)) {
-            localStorage.setItem("access_granted", "yes");
+        if (data.includes(myCode)) {
+            localStorage.setItem("access", "ok"); // منوحّد
             window.location.href = "main.html";
         }
-    } catch (e) {
-        console.error("خطأ في تحميل codes.json");
+    } catch (err) {
+        console.log("خطأ في فحص الكود:", err);
     }
 }
 
-// نتحقق كل ثانية
+// 3️⃣ فحص كل ثانية
 setInterval(checkAccess, 1000);
 </script>
 
