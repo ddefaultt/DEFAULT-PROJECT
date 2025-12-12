@@ -1,4 +1,19 @@
+async function checkAccess() {
+  let code = getCookie("user_code");
+  if(!code) return window.location = "index.html";
 
+  try {
+    const res = await fetch("codes.json?time=" + Date.now(), { cache: "no-store" });
+    const data = await res.json();
+
+    const allowed = data.some(e => e.code === code);
+
+    if(!allowed) window.location = "index.html";
+
+  } catch (e) {
+    console.log("خطأ في جلب codes.json:", e);
+  }
+}
 document.getElementById('webhookForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
